@@ -1,0 +1,47 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":dependencyDashboard"],
+  "labels": ["dependencies"],
+  "minimumReleaseAge": "5 days",
+  "packageRules": [
+    {
+      "description": "Node 24 LTS lock — block major node bumps (no 24->25/26)",
+      "matchDatasources": ["docker", "node-version"],
+      "matchPackageNames": ["node"],
+      "allowedVersions": "<25"
+    },
+    {
+      "description": "Tier-1 auto-merge: patch, pin, digest, lockfile maintenance",
+      "matchUpdateTypes": ["patch", "pin", "digest", "lockFileMaintenance"],
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "Tier-1 auto-merge: devDependencies minor+patch",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "Tier-1 auto-merge: GitHub Actions minor+patch",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "Manual review: all major updates (incl. prod-dep majors)",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "description": "Never manage self-built dahhan images — their digests are set at release time, not by Renovate",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/mahmutdehhan/**"],
+      "enabled": false
+    }
+  ],
+  "lockFileMaintenance": { "enabled": true },
+  "vulnerabilityAlerts": { "labels": ["security"], "automerge": false }
+}
