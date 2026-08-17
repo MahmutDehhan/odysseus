@@ -5,6 +5,15 @@ on:
     types: [opened, edited, reopened]
 
 permissions:
+  # contents:read is required by the actions/checkout below. Without it this job
+  # only works because this repository is PUBLIC -- checkout silently falls back to
+  # an unauthenticated clone. The moment odysseus goes private, GITHUB_TOKEN has no
+  # contents scope and checkout fails with "Repository not found" (GitHub answers an
+  # unauthorised private clone with not-found, not forbidden), which reads like a
+  # missing repo rather than a permissions bug.
+  #
+  # That exact shape cost m1d0-control-plane three weeks of container CVE scanning.
+  contents: read
   issues: write
 
 jobs:
